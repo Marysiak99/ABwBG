@@ -1,0 +1,16 @@
+---
+title: "Zadanie3.Rmd"
+author: "Maria K"
+date: "2024-10-15"
+output: html_document
+---
+
+**Wprowadzenie**
+Raport przedstawia podsumowanie wykonanych zadań podczas dzisiejszych ćwiczeń.
+**Opis środowiska**
+W zadaniu 2 zainstalowałam pakiet *plotly*. Służy on do tworzenia interaktywnych wykresów. 
+Podjęłam także próbę zainstalowania pakietu *geno2proteo*, który mnie zainteresował ze względu na jego potencjalną przydatność przy analizie sekwencji DNA oraz białek, jednak nie udało się go zainstalować. 
+**Przykładowy kod**
+Aby wczytać pakiet *plotly*,należy użyć kodu: library(plotly)
+**Wnioski:**
+Nie udało się zainstalować pakietu *geno2proteo* ponieważ wersja pakietu jest niezgodna z wersją zainstalowaną na komputerze.

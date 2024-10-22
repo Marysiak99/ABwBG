@@ -1,0 +1,32 @@
+---
+title: "Czesc4"
+author: "Maria K"
+date: "2024-10-22"
+output: html_document
+---
+
+# Część czwarta: Praca z ramkami danych 
+## Zadanie 1 
+*Utwórz ramkę danych zawierającą informacje o produktach: nazwa (tekst), cena (liczba), ilość (liczba całkowita).*
+```{r}
+dane_ramka_produkty <- data.frame(
+  nazwa = c("mleko", "chleb", "jajka"),
+  cena = c(5.99, 2.5, 8.98),
+  liczba = c(22, 40, 45)
+)
+
+```
+
+## Zadanie 2 
+*Wyświetl kolumnę `'nazwa'` z ramki danych produktów.*
+```{r}
+dane_ramka_produkty$nazwa
+```
+
+## Zadanie 3
+*Dodaj nową kolumnę `'wartość'` obliczaną jako cena pomnożona przez ilość.*
+```{r}
+dane_ramka_produkty$wartosc <- (dane_ramka_produkty$cena*dane_ramka_produkty$liczba)
+print(dane_ramka_produkty$wartosc)
+```
+

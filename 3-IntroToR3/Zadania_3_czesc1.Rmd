@@ -1,0 +1,51 @@
+---
+title: "Czesc1"
+author: "Maria K"
+date: "2024-10-22"
+output: html_document
+---
+
+# Funkcje matematyczne 
+## Zadanie 1 
+*Oblicz pole trójkąta o podstawie 10 i wysokości 5, używając operatora mnożenia*
+Pole obliczamy za pomocą wzoru $a*h/2$. Przypiszmy zmienne: 
+```{r}
+a <- 10
+h <- 5 
+```
+Zdefiniujmy pole trójkąta:
+```{r}
+pole_trojkata <- a*h/2
+
+```
+Sprawdzamy wynik:
+```{r}
+pole_trojkata
+```
+
+
+```{r}
+print(pole_trojkata)
+```
+## Zadanie 2 
+*Znajdź resztę z dzielenia 256 przez 7 oraz wynik dzielenia całkowitego.*
+```{r}
+c <- 256/7
+d<- 256%%7
+f<-256%/%7
+
+print(c)
+print(d)
+print(f)
+```
+## Zadanie 3 
+*Oblicz wartość wyrażenia $e^{\ln(5)}$, używając funkcji `exp()` i `log()`.*
+
+## Zadanie 4 
+*Zaokrąglij liczbę 7,895 do najbliższej liczby całkowitej: w górę i w dół.*
+
+## Zadanie 5 
+*Oblicz wartość funkcji tangens dla kąta $45^\circ$ (pamiętaj o konwersji stopni na radiany).*
+
+## Zadanie 6 
+*Oblicz wartość wyrażenia $\sqrt{3^2 + 4^2}$, używając funkcji `sqrt()` i operatora potęgowania.*

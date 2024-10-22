@@ -1,0 +1,36 @@
+---
+title: "Czesc3"
+author: "Maria K"
+date: "2024-10-22"
+output: html_document
+---
+
+# Część 3: Operacje na wektorach i indeksowanie
+## Zadanie 1
+*Stwórz wektor, który będzie zwracał wszystkie wartości od 0 do 1 co 0,1.*
+Definiujemy wektor:
+
+```{r}
+wektor4 <- seq(from = 0, to = 1, by = 0.1)
+
+```
+Sprawdzamy wynik:
+```{r}
+print(wektor4)
+```
+## Zadanie 2
+*Dla wektora $[2, 4, 6, 8, 10]$ wybierz drugi i czwarty element.*
+```{r}
+wektor5 <- c(2, 4, 6, 8, 10)
+```
+drugi element:
+```{r}
+drugi <- wektor5[2]
+print(drugi)
+```
+czwarty element:
+```{r}
+czwarty <- wektor5[4]
+print(czwarty)
+```
+

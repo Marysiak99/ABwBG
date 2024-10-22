@@ -1,0 +1,53 @@
+---
+title: "Czesc2"
+author: "Maria K"
+date: "2024-10-22"
+output: html_document
+---
+
+# Część 2: Funkcje statystyczne 
+## Zadanie 1 
+*Dla wektora danych $[2, 4, 6, 8, 10]$ oblicz średnią arytmetyczną, medianę oraz wariancję.*
+```{r}
+wektor <- c(2,4, 6, 8,10)
+```
+Definiujemy miary statystyczne wektora: 
+```{r}
+srednia <- mean(wektor)
+mediana<- median(wektor)
+wariancja <- var(wektor)
+```
+Wyświetlamy wynik:
+```{r}
+print(srednia)
+print(mediana)
+print(wariancja)
+```
+## Zadanie 2 
+*Stwórz wektor z 50 losowych liczb z przedziału od 1 do 100. Znajdź wartość minimalną, maksymalną oraz sumę wszystkich elementów.*
+
+```{r}
+wektor2 <- c(1:100)
+
+losowe <- sample(wektor2, size =50, replace = FALSE)
+
+minimalna <- min(losowe)
+maksymalna <- max(losowe)
+suma <- sum(losowe)
+```
+Wyniki:
+```{r}
+print(minimalna)
+print(maksymalna)
+print(suma)
+```
+## Zadanie 3 
+*Dla wektora danych $[3, 7, 7, 7, 2, 2, 5]$ utwórz tabelę częstości występowania każdej wartości.*
+
+```{r}
+wektor3 <- c("3", "7", "7", "7", "2", "2", "5")
+
+tabela <- table(wektor3)
+
+```
+

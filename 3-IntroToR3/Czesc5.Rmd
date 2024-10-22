@@ -1,0 +1,55 @@
+---
+title: "Część 5 i 6"
+author: "Maria K"
+date: "2024-10-22"
+output: html_document
+---
+# Część 5: Funkcje logiczne i warunkowe 
+## Zadanie 1 
+*Sprawdź, czy liczba 7 jest większa od 5 i jednocześnie mniejsza od 10.*
+```{r}
+x <- 7
+y <- 5
+z <- 10
+
+(x>y)&(x<z)
+warunek <- (x>y)&(x<z)
+```
+## Zadanie 2 
+*Dla wektora $[-3, 2, 5]$ użyj funkcji `ifelse()`, aby przypisać "Dodatnia" lub "Ujemna" do każdego elementu.*
+Tworzę wektor:
+```{r}
+wektor6 <- c(-3, 2, 5)
+
+wyniki <- ifelse(wektor6 > 0, "dodatnia", "ujemna")
+
+print(wyniki)
+```
+# Część 6: Pętle i iteracje
+## Zadanie 1 
+*Napisz pętlę `for`, która wypisze liczby od 1 do 5.*
+```{r}
+for (i in 1:5) {
+  print(i)
+}
+```
+## Zadanie 2 
+*Użyj pętli `while`, aby obliczyć silnię liczby 5.*
+```{r}
+n <- 5
+silnia <- 1 
+i <- 1 
+```
+```{r}
+  while (i <= 5) {
+  silnia <- 1 * i
+  i <- i + 1
+}
+```
+Wynik:
+```{r}
+print(silnia)
+```
+
+
+

@@ -1,0 +1,70 @@
+# Instalacja pakietu:
+```{r}
+install.packages("BiocManager")
+
+```
+```{r}
+BiocManager::install(c("GenomicFeatures", "AnnotationDbi", 
+"ShortRead", "Biostrings"))
+```
+```{r}
+BiocManager::install("GenomicFeatures")
+```
+```{r}
+```
+
+
+```{r}
+BiocManager::install("ShortRead")
+```
+```{r}
+library("GenomicFeatures")
+
+```
+```{r}
+BiocManager::install("AnnotationDbi")
+```
+```{r}
+BiocManager::install("ShortRead")
+```
+
+```{r}
+BiocManager::install("Biostrings")
+```
+
+```{r}
+library("GenomicFeatures")
+```
+
+```{r}
+install.packages(c("SummarizedExperiment"))
+                       
+```
+```{r}
+library("GenomicFeatures")
+library("AnnotationDbi")
+library("ShortRead")
+library("Biostrings")
+```
+# Wczytanie sekwencji z pliku FASTA
+
+```{r}
+dna_seqs <- readDNAStringSet("c:/Users/s207313/Desktop/Zadania/FASTA/examples.fasta")
+```
+# Wyświetlenie pierwszych kilku sekwencji
+
+```{r}
+dna_seqs[1:5]
+```
+# Odwrócenie i komplementarność sekwencji
+```{r}
+rev_comp_seqs <- reverseComplement(dna_seqs)
+rev_comp_seqs[1:5]
+```
+
+# Obliczanie zawartości GC
+```{r}
+gc_content <- letterFrequency(dna_seqs, letters = c("G", "C"), as.prob = TRUE)
+gc_content
+```
+

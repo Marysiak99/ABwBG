@@ -1,0 +1,172 @@
+---
+title: "Kolokwium1"
+author: "Maria K"
+date: "2024-11-26"
+output: html_document
+---
+# Raport z analizy sekwencji Esherichia Coli 
+# Analiza jakości sekwencji: filtrowanie i trymowanie sekwencji 
+### Ładuję niezbędne pakiety do analizy:
+```{r}
+library(ShortRead)
+library(Rsubread)
+library(Biostrings)
+```
+
+## Preprocesing danych sekwencyjnych w formacie FASTQ: 
+### Wczytuję plik w formacie FASTQ: 
+```{r}
+fastq_file <- "C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/ecoli_raw.fq"
+seq_data <- readFastq(fastq_file)
+```
+### Sprawdzam jakość sekwencji poprzez wygenerowanie raportu: 
+```{r}
+quality_report <- qa(fastq_file, type = "fastq")
+report(quality_report, dest = "C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/QA_report.html")
+```
+```{r}
+fq_reads <- readFastq(fastq_file)
+length(fq_reads)
+fq_reads[1:5]
+```
+## Przycinanie i filtracja odczytów:
+### Ustalam wartość Phred dla progu jakości
+```{r}
+phred_threshold <- 20
+```
+### Obliczam odpowiadający symbol jakości dla Phred+33
+```{r}
+quality_symbol <- intToUtf8(phred_threshold + 33)
+#przykład dla Phred = 20 
+symbol <- intToUtf8(20 + 33)  # Wynik: "5"
+```
+### Przycinam odczyty
+```{r}
+ fq_reads
+  k = 2               # Liczba kolejnych baz o niskiej jakości
+  a = "5"  # Symbol jakości odpowiadający Phred 20
+  halfwidth = 1        # Połowa szerokości okna średniej ruchomej
+
+trimmed_reads <- trimTailw
+  
+trimmed_reads <- trimTailw(fq_reads, k = 2, a = "5", halfwidth = 1)  
+```
+
+### Sprawdzam, jaka ilość sekwencji została przycięta: 
+```{r}
+
+sum(width(trimmed_reads) < width(fq_reads))
+```
+### Filtracja odczytów: 
+```{r}
+filtered_reads <- trimmed_reads[width(trimmed_reads) >= 50]
+```
+### Sprawdzam liczbę odczytów przed i po filtracji: 
+```{r}
+length(trimmed_reads)       # Po przycinaniu
+length(filtered_reads)      # Po filtracji
+```
+### Sprawdzam procent odczytów odrzuconych po filtracji: 
+```{r}
+FilteredSeq <- (1-291316/299809)*100
+FilteredSeq
+```
+## Analiza jakości po trymowaniu i filtracji 
+### Zapisuję nowy plik:
+```{r}
+writeFastq(filtered_reads, "C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/ecoli_processed.fq")
+```
+
+### Generuję nowy raport 
+```{r}
+writeFastq(filtered_reads, "C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/e.coli_processed.fastq.gz")
+qa_results_processed <- qa("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/e.coli_processed.fastq.gz", type = "fastq")
+report(qa_results_processed, dest = "C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/QA_report_e.coli_processed.html")
+```
+
+```{r}
+
+adapter_seq <- DNAString("AGATCGGAAGAGC")
+trimmed_reads_adapt <- trimLRPatterns(
+  Lpattern = adapter_seq,
+  subject = filtered_reads
+)
+
+filtered_reads <- trimmed_reads_adapt
+```
+### Porównanie długości przed i po przycięciu adapterów: 
+```{r}
+length(filtered_reads)
+length(trimmed_reads_adapt)
+```
+### sprawdzenie ilości zmodyfikowanych odczytów 
+```{r}
+sum(width(filtered_reads) < width(trimmed_reads))
+
+```
+### Generuję ostateczny raport po przycięciu adaptorów: 
+```{r}
+writeFastq(filtered_reads, "C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/ecoli_simulated_final.fq")
+```
+
+
+```{r}
+qa_results_final <- qa("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/ecoli_simulated_final.fq", type = "fastq")
+   report(qa_results1_final, dest = "C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/QA_report_read1_final")
+```
+## Przygotowanie genomu referencyjnego 
+```{r}
+download.file("ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/005/845/GCA_000005845.2_ASM584v2/GCA_000005845.2_ASM584v2_genomic.fna.gz", destfile = "C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/ecoli_genome.fna.gz")
+
+```
+### Wczytanie pliku zawierającego gen referencyjny: 
+```{r}
+ref_genome <- readDNAStringSet("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/R-19-11/ecoli_genome.fna.gz")
+```
+### Indeksowanie genomu referencyjnego
+```{r}
+buildindex(basename = "ecoli_index", reference = "C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/RKolokwium1/ecoli_genome.fna.gz")
+```
+### Mapowanie 
+```{r}
+align(
+  index = "ecoli_index",
+  readfile1 = "C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/ecoli_simulated_final.fq",
+  input_format = "FASTQ",
+  output_file = "C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/aligned_sample.BAM"
+)
+```
+
+### Importuję zmapowane odczyty 
+```{r}
+aln <- readGAlignments("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/aligned_sample.BAM")
+```
+
+### Obliczenie pokrycia genomu 
+```{r}
+coverage_data <- coverage(aln)
+
+coverage_data 
+```
+```{r}
+cov_df <- as.data.frame(coverage_data[[1]])
+cov_df$position <- as.numeric(rownames(cov_df))
+head(cov_df)
+```
+```{r}
+mean(cov_df$value)
+```
+### Wykonanie wykresu pokrycia genomu za pomocą pakietu ggplot2
+```{r}
+library(ggplot2)
+pdf("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/Rkolokwium1/Wykres_pokrycia.pdf", width = 8, height = 6)
+
+ggplot(cov_df[1:25000, ], aes(x = position, y = value)) +
+  geom_line(color = "blue") +
+  labs(title = "Pokrycie genomu E. coli",
+       x = "Pozycja w genomie",
+       y = "Liczba zmapowanych odczytów")
+dev.off()
+```
+
+

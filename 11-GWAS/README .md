@@ -1,5 +1,5 @@
 # Analiza GWAS (Genome-Wide Association Study)
-## Analiza GWAS identyfikuje związki między wariantami genetycznymi, takimi jak SNP, a cechami fenotypowymi, np. chorobami lub cechami fizycznymi. Wykorzystuje duże zbiory danych genotypowych i statystyczne modele, aby wykrywać regiony genomu związane z określonymi fenotypami. 
+## Analiza GWAS identyfikuje związki między wariantami genetycznymi, takimi jak SNP, a cechami fenotypowymi, np. chorobami lub cechami fizycznymi. Wykorzystuje duże zbiory danych genotypowych i statystyczne modele, aby wykrywać regiony genomu związane z określonymi fenotypami. Poniżej znajduje się przykładowy kod do analizy danych genotypowych i fenotypowych, obejmujący przygotowanie danych, PCA i GWAS. 
 ## Wczytanie i załadowanie niezbędnych pakietów:
 ```{r}
 packages <- c("rrBLUP"
@@ -65,7 +65,7 @@ Geno <- t(Geno)
 ```{r}
 dim(Geno)
 ```
-3. Wczytaj dane fenotypowe i sprawdź ich zgodność z danymi genotypowymi.
+## Wczytuję dane fenotypowe i sprawdzam ich zgodność z danymi genotypowymi:
 ```{r}
 rice.pheno <- read.table("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/GWAS/RiceDiversity_44K_Phenotypes_34traits_PLINK.txt",
                          header = TRUE, stringsAsFactors = FALSE, sep = "\t")
@@ -123,8 +123,8 @@ dim(MAP1)
 ```
 
 ## Analiza PCA (identyfikuje główne komponenty w danych genotypowych, aby zrozumieć strukturę populacji):
-Wyniki PCA są wizualizowane na wykresie, gdzie można dostrzec grupy populacyjne.:
-Utwórz macierz markerów.
+Wyniki PCA są wizualizowane na wykresie, gdzie można dostrzec grupy populacyjne.
+Tworzę macierz markerów.
 
 ```{r}
 Geno1 <- as.matrix(Geno1)
@@ -169,7 +169,7 @@ plot(pca$EV2, pca$EV1, xlab = "PC2", ylab = "PC1")
 ## Wczytuję dodatkowe informacje o próbkach z pliku `gerplasm.csv`.
 
 ```{r}
-pca_1 <- read.csv("RiceDiversity.44K.germplasm.csv", 
+pca_1 <- read.csv("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/GWAS/RiceDiversity.44K.germplasm.csv", 
                   header = TRUE, skip = 1, stringsAsFactors = FALSE)
 pca_2 <- pca_1[match(pca$sample.id, pca_1$NSFTV.ID), ]
 
@@ -209,10 +209,12 @@ GWAS_1 %>% filter(y < 1e-04)
 ```{r}
 head(GWAS_1)
 ```
-
 ## Tworzę wykres Manhattan, który wizualizuje istotność markerów SNP w analizie GWAS: 
 
 ```{r}
 manhattan(x = GWAS_1, chr = "chrom", bp = "pos", p = "y", snp = "marker", 
           col = c("blue4", "orange3"), suggestiveline = -log10(1e-04), logp = TRUE)
 ```
+# Podsumowanie i interpretacja wyników 
+Markery SNP, których p-wartości są mniejsze niż ustalony próg (np. 1e-04), są uważane za potencjalnie istotne, co oznacza, że mogą być związane z badaną cechą fenotypową.
+Analiza PCA pozwala zrozumieć strukturę populacji, identyfikując podgrupy, podczas gdy wyniki GWAS wskazują markery SNP związane z cechami fenotypowymi, które mogą być istotne dla dalszych badań genetycznych. 

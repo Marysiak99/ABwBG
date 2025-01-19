@@ -1,5 +1,5 @@
 # Analiza GWAS (Genome-Wide Association Study)
-## Analiza GWAS identyfikuje związki między wariantami genetycznymi, takimi jak SNP, a cechami fenotypowymi, np. chorobami lub cechami fizycznymi. Wykorzystuje duże zbiory danych genotypowych i statystyczne modele, aby wykrywać regiony genomu związane z określonymi fenotypami.
+## Analiza GWAS identyfikuje związki między wariantami genetycznymi, takimi jak SNP, a cechami fenotypowymi, np. chorobami lub cechami fizycznymi. Wykorzystuje duże zbiory danych genotypowych i statystyczne modele, aby wykrywać regiony genomu związane z określonymi fenotypami. 
 ## Wczytanie i załadowanie niezbędnych pakietów:
 ```{r}
 packages <- c("rrBLUP"
@@ -92,7 +92,7 @@ Geno <- Geno[index, ]
 table(rownames(Geno) == rownames(y))
 ```
 ## Przeprowadzam kontrolę jakości (QC) danych markerowych:
-Zastąp brakujące dane markerowe średnią wartością dla każdego markera.
+### Zastąpienie brakujących danych markerowych średnią wartością dla każdego markera: 
 
 ```{r}
 for (j in 1:ncol(Geno)){
@@ -100,17 +100,17 @@ for (j in 1:ncol(Geno)){
 }
 ```
 
-Odfiltruj markery z MAF < 5%.
+### Usunięcie markerów z MAF < 5%: 
 ```{r}
 # obliczanie frekwencji allelu mniejszościowego dla każdego SNP
 p <- colSums(Geno)/(2 * nrow(Geno))
 
-# definiujemy MAF
+### Definiuję MAF:
 maf <- ifelse(p > 0.5, 1-p, p)
 maf.index <- which(maf < 0.05)
 Geno1 <- Geno[, -maf.index]
 
-# sprawdzamy wymiary nowej macierzy
+### Sprawdzam wymiary nowej macierzy: 
 dim(Geno1)
 ```
 Zaktualizuj plik `.map` i podaj nowe wymiary danych genotypowych oraz informacji o markerach.
@@ -122,7 +122,8 @@ MAP1 <- MAP[-maf.index, ]
 dim(MAP1)
 ```
 
-5. Wykonaj analizę PCA:
+## Analiza PCA (identyfikuje główne komponenty w danych genotypowych, aby zrozumieć strukturę populacji):
+Wyniki PCA są wizualizowane na wykresie, gdzie można dostrzec grupy populacyjne.:
 Utwórz macierz markerów.
 
 ```{r}
@@ -134,7 +135,7 @@ colnames(Geno1) <- MAP1$V2
 snp.id <- colnames(Geno1)
 length(snp.id)
 ```
-Utwórz plik GDS.
+## Tworzenie pliku GDS:
 
 ```{r}
 BiocManager::install("SNPRelate")
@@ -151,7 +152,7 @@ snpgdsSummary("44k.gds")
 #nie udało się zainstalować pakietu
 ```
 
-Przeprowadź PCA.
+## Przeprowadzam PCA:
 
 ```{r}
 pca <- snpgdsPCA(geno_44k, snp.id = colnames(Geno1))
@@ -165,7 +166,7 @@ pca <- data.frame(sample.id = row.names(Geno1),
 plot(pca$EV2, pca$EV1, xlab = "PC2", ylab = "PC1")
 ```
 
-Wczytaj dodatkowe informacje o próbkach z pliku `gerplasm.csv`.
+## Wczytuję dodatkowe informacje o próbkach z pliku `gerplasm.csv`.
 
 ```{r}
 pca_1 <- read.csv("RiceDiversity.44K.germplasm.csv", 
@@ -181,7 +182,7 @@ legend(x = "topright", legend = levels(factor(pca_population$population)),
        col = c(1:6), pch = 1, cex = 0.6)
 ```
 
-6. Przygotuj dane do analizy GWAS:
+## Przygotwuję dane do analizy GWAS:
 Przygotuj dane genotypowe i fenotypowe do analizy.
 
 ```{r}
@@ -191,20 +192,19 @@ geno_final <- data.frame(marker = MAP1[, 2], chrom = MAP1[, 1], pos = MAP1[, 4],
 pheno_final <- data.frame(NSFTV_ID = rownames(y), y = y)
 ```
 
-Wykonaj analizę GWAS.
+## Analiza GWAS:
 ```{r}
 GWAS <- GWAS(pheno_final, geno_final, min.MAF = 0.05, P3D = TRUE, plot = FALSE)
 ```
 
-
-7. Wyodrębnij istotne markery SNP.
+## Wyodrębniam istotne markery SNP:
 
 ```{r}
 GWAS_1 <- GWAS %>% filter(y != "0")
 GWAS_1 %>% filter(y < 1e-04)
 ```
 
-Podaj listę markerów SNP spełniających ustalone kryterium p-wartości.
+## lista markerów SNP spełniających ustalone kryterium p-wartości: 
 
 ```{r}
 head(GWAS_1)

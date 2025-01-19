@@ -20,7 +20,7 @@ packages <- c("rrBLUP"
 library(pkg, character.only = TRUE)
 
 ```
-### Wczytanie danych genotypowych: 
+
 - Przekodu wartości markerów zgodnie z poniższym schematem:
   - **2** → **NA** (brakujące dane).  
   - **0** → **0** (homozygota dla allelu głównego).  
@@ -28,7 +28,7 @@ library(pkg, character.only = TRUE)
   - **3** → **2** (homozygota dla allelu mniejszościowego).  
    - Przekonwertuj dane na macierz i dokonaj jej transpozycji.
    - Podaj wymiary macierzy (liczbę osobników i markerów SNP).
-   
+### Wczytanie danych genotypowych:  
 ```{r}
 setwd("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/GWAS")
 Geno <- read_ped("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/GWAS/sativas413.ped")
@@ -45,6 +45,7 @@ head(FAM)
 MAP <- read.table("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/GWAS/sativas413.map")
 head(MAP)
 ```
+## Przekodowanie wartości markerów: 
 ```{r}
 Geno[Geno == 2] <- NA
 Geno[Geno == 0] <- 0
@@ -52,14 +53,14 @@ Geno[Geno == 1] <- 1
 Geno[Geno == 3] <- 2
 ```
    
-##Przekonwertuj dane na macierz i dokonaj jej transpozycji.
+## Konwertuję dane na macierz i dokonuję jej transpozycji: 
 
 ```{r}
 Geno <- matrix(Geno, nrow = p, ncol = n, byrow = TRUE)
 Geno <- t(Geno)
 ```
    
-Podaj wymiary macierzy (liczbę osobników i markerów SNP).
+## Wymiary macierzy (liczba osobników i markerów SNP): 
 
 ```{r}
 dim(Geno)
@@ -70,17 +71,17 @@ rice.pheno <- read.table("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)
                          header = TRUE, stringsAsFactors = FALSE, sep = "\t")
 head(rice.pheno)
 
-# wymiary - pierwsza wartość powinna być taka sama jak w `dim(Geno)`
+## Wymiary - pierwsza wartość powinna być taka sama jak w `dim(Geno)`
 dim(rice.pheno)
 
-# przypisujemy nazwy wierszy dla macierzy Geno na podstawie drugiej kolumny (V2) z ramki FAM, zawierającej identyfikatory próbek
+## Przypisuję nazwy wierszy dla macierzy Geno na podstawie drugiej kolumny (V2) z ramki FAM, zawierającej identyfikatory próbek
 
 rownames(Geno) <- FAM$V2
 
-# sprawdzenie zgodności
+## Sprawdzenie zgodności
 table(rownames(Geno) == rice.pheno$NSFTVID)
 ```
-#Wyodrębnij pierwszą cechę.
+## Wyodrębniam pierwszą cechę:
 
 ```{r}
 y <- matrix(rice.pheno$Flowering.time.at.Arkansas)
@@ -90,7 +91,7 @@ y <- y[index,1, drop = FALSE]
 Geno <- Geno[index, ]
 table(rownames(Geno) == rownames(y))
 ```
-4. Przeprowadź kontrolę jakości (QC) danych markerowych:
+## Przeprowadzam kontrolę jakości (QC) danych markerowych:
 Zastąp brakujące dane markerowe średnią wartością dla każdego markera.
 
 ```{r}

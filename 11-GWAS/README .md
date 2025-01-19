@@ -113,7 +113,7 @@ Geno1 <- Geno[, -maf.index]
 ### Sprawdzam wymiary nowej macierzy: 
 dim(Geno1)
 ```
-Zaktualizuj plik `.map` i podaj nowe wymiary danych genotypowych oraz informacji o markerach.
+### Aktualizuję plik `.map` i podaję nowe wymiary danych genotypowych oraz informacji o markerach.
 
 ```{r}
 MAP <- read.table("C:/Users/marys/Dropbox/Mój komputer (LAPTOP-6CIOMO42)/Desktop/MAGISTERSKIE/SEMESTR_II/GWAS/sativas413.map")

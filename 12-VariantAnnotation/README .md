@@ -42,6 +42,7 @@ geno(vcf_header)
 num_variants <- nrow(vcf_data)
 num_variants
 ```
+### Liczba wariantów: 10376 
 ## Krok 3: Filtracja i analiza jakości
 ```{r}
 # Pobieram kolumnę QUAL i usuwam NA
@@ -58,5 +59,46 @@ num_variants_after <- nrow(high_quality_variants)
 cat("Liczba wariantów przed filtracją:", num_variants_before, "\n")
 cat("Liczba wariantów po filtracji (QUAL >= 30):", num_variants_after, "\n")
 ```
-Liczba wariantów przed filtracją: 10376 
-Liczba wariantów po filtracji (QUAL >= 30): 10364 
+### Liczba wariantów przed filtracją: 10376 
+### Liczba wariantów po filtracji (QUAL >= 30): 10364 
+# Krok 4: Anotacja wariantów
+```{r}
+BiocManager::install("TxDb.Hsapiens.UCSC.hg19.knownGene")
+```
+```{r}
+### Sprawdzenie dostępnych kolumn w INFO - ładuję wymagane pakiety
+```{r}
+library(VariantAnnotation)
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+```
+### Przekształcam obiekt VCF na GRanges
+```{r}
+granges_vcf <- as(vcf_data, "GRanges")
+```
+### Przygotowanie obiektu TxDb
+```{r}
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+```
+### Anotacja wariantów
+```{r}
+annotated_variants <- locateVariants(granges_vcf, txdb)
+```
+### Sprawdzenie wyników
+```{r}
+head(annotated_variants)
+```
+### Pobieranie regionów 5'UTR i 3'UTR
+```{r}
+utr5 <- fiveUTRsByTranscript(txdb)
+utr3 <- threeUTRsByTranscript(txdb)
+
+utr_regions <- c(utr5, utr3)
+
+utr5_variants <- findOverlaps(granges_vcf, utr5)
+utr3_variants <- findOverlaps(granges_vcf, utr3)
+
+cat("Liczba wariantów w 5'UTR:", length(utr5_variants), "\n")
+cat("Liczba wariantów w 3'UTR:", length(utr3_variants), "\n")
+```
+# Podsumowanie 
+### W analizie wariantów genetycznych na chromosomie 22 przed filtracją znajdowało się 10376 wariantów, z czego po zastosowaniu filtru jakościowego (QUAL ≥ 30) liczba ta zmniejszyła się do 10364. Po wyodrębnieniu wariantów z regionów kodujących, porównano ich liczbę z wariantami znajdującymi się w regionach międzygenowych. W analizie uwzględniono także warianty z regionów 5'UTR i 3'UTR, które następnie zostały porównane pod kątem liczebności. Możliwości rozszerzenia analizy obejmują ocenę funkcji genów, powiązanie wariantów z chorobami, analizę częstotliwości wariantów w różnych populacjach, oraz zastosowanie narzędzi bioinformatycznych, takich jak SIFT czy PolyPhen, do oceny biologicznego wpływu tych wariantów.
